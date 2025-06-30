@@ -38,14 +38,14 @@
     <!-- Contact Form -->
     <div class="contact-form-container">
       <h2>Contact Me</h2>
-      <form class="contact-form">
-        <input type="text" placeholder="Your Name" required />
-        <input type="email" placeholder="Your Email" required />
-        <textarea rows="4" placeholder="Your Message" required></textarea>
+      <form action="https://formsubmit.co/rameldawood2@gmail.com" method="POST" class="contact-form">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="text" name="name" placeholder="Your Name" required>
+        <input type="email" name="email" placeholder="Your Email" required>
+        <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
         <button type="submit" class="start-btn">Send Message</button>
       </form>
     </div>
-  </div>
 
   <!-- Quiz Questions -->
   <div class="container hide" id="question-container">
