@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link href="styles.css" rel="stylesheet"/>
+  <script defer src="script.js"></script>
+  <title>Quiz App</title>
+</head>
+<body>
+
+  <!-- Start Screen -->
+  <div class="container" id="start-screen">
+    <img src="quiz-logo.jpeg" alt="Quiz Logo" class="logo" />
+    <h1 class="title">Welcome to the Quiz</h1>
+
+    <div class="start-controls controls">
+      <label for="difficulty-select" class="difficulty-label">Select Difficulty:</label>
+      <select id="difficulty-select" class="difficulty-select">
+        <option value="all" selected>All</option>
+        <option value="easy">Easy</option>
+        <option value="medium">Medium</option>
+        <option value="hard">Hard</option>
+      </select>
+      <button id="start-btn" class="start-btn">Start</button>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>Created by <strong>Ramel Dawood</strong></p>
+      <div class="social-icons">
+        <a href="https://www.linkedin.com/in/ramel-dawood-4436b6298/" target="_blank">🔗<span>LinkedIn</span></a>
+        <a href="https://github.com/rameldawood2025" target="_blank">💻<span>GitHub</span></a>
+      </div>
+    </footer>
+
+    <!-- Contact Form -->
+    <div class="contact-form-container">
+      <h2>Contact Me</h2>
+      <form class="contact-form">
+        <input type="text" placeholder="Your Name" required />
+        <input type="email" placeholder="Your Email" required />
+        <textarea rows="4" placeholder="Your Message" required></textarea>
+        <button type="submit" class="start-btn">Send Message</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Quiz Questions -->
+  <div class="container hide" id="question-container">
+    <div class="quiz-header">
+      <div id="timer" class="timer">15s</div>
+      <div class="progress-bar-background">
+        <div id="progress-bar" class="progress-bar"></div>
+      </div>
+    </div>
+    <div id="question">Question</div>
+    <div id="answer-buttons" class="btn-grid"></div>
+    <div class="controls">
+      <button id="next-btn" class="next-btn hide">Next</button>
+    </div>
+  </div>
+
+  <!-- Quiz Result -->
+  <div class="container hide" id="score-container">
+    <h2 id="score-text"></h2>
+    <div class="controls">
+      <button id="restart-btn" class="start-btn">Back to Start Screen</button>
+    </div>
+  </div>
+
+  <!-- Background Blobs -->
+  <div class="blob top-left"></div>
+  <div class="blob bottom-right"></div>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
