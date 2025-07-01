@@ -11,7 +11,10 @@ const difficultySelect = document.getElementById('difficulty-select');
 const progressBar = document.getElementById('progress-bar');
 const timerDisplay = document.getElementById('timer');
 
-let shuffledQuestions = [], currentQuestionIndex = 0, score = 0, countdown;
+let shuffledQuestions = [];
+let currentQuestionIndex = 0;
+let score = 0;
+let countdown = null;
 const QUESTION_TIME = 15;
 
 startButton.addEventListener('click', startGame);
@@ -28,7 +31,7 @@ function startGame() {
   scoreContainer.classList.add('hide');
   questionContainerElement.classList.remove('hide');
 
-  const selectedDifficulty = difficultySelect?.value || 'all';
+  const selectedDifficulty = difficultySelect.value;
   const filtered = selectedDifficulty === 'all'
     ? questions
     : questions.filter(q => q.difficulty === selectedDifficulty);
@@ -56,6 +59,12 @@ function returnToStartScreen() {
 
 function setNextQuestion() {
   resetState();
+
+  if (!shuffledQuestions[currentQuestionIndex]) {
+    returnToStartScreen();
+    return;
+  }
+
   showQuestion(shuffledQuestions[currentQuestionIndex]);
   updateProgress((currentQuestionIndex + 1) / shuffledQuestions.length * 100);
   startTimer(QUESTION_TIME);
@@ -63,6 +72,7 @@ function setNextQuestion() {
 
 function showQuestion(question) {
   questionElement.innerText = question.question;
+  answerButtonsElement.innerHTML = '';
   question.answers.forEach(answer => {
     const button = document.createElement('button');
     button.innerText = answer.text;
@@ -77,9 +87,7 @@ function resetState() {
   clearInterval(countdown);
   clearStatusClass(document.body);
   nextButton.classList.add('hide');
-  while (answerButtonsElement.firstChild) {
-    answerButtonsElement.removeChild(answerButtonsElement.firstChild);
-  }
+  answerButtonsElement.innerHTML = '';
   timerDisplay.innerText = '';
 }
 
@@ -88,18 +96,19 @@ function selectAnswer(e) {
   const selectedButton = e.target;
   const correct = selectedButton.dataset.correct === 'true';
   if (correct) score++;
+
   setStatusClass(document.body, correct);
   Array.from(answerButtonsElement.children).forEach(button => {
     setStatusClass(button, button.dataset.correct === 'true');
+    button.disabled = true;
   });
 
   if (shuffledQuestions.length > currentQuestionIndex + 1) {
     nextButton.classList.remove('hide');
   } else {
-    questionContainerElement.classList.add('hide');
-    scoreContainer.classList.remove('hide');
-    scoreText.innerText = `You scored ${score} out of ${shuffledQuestions.length}!`;
-    restartButton.innerText = 'Back to Start Screen';
+    setTimeout(() => {
+      showFinalScore();
+    }, 800);
   }
 }
 
@@ -109,8 +118,7 @@ function setStatusClass(element, correct) {
 }
 
 function clearStatusClass(element) {
-  element.classList.remove('correct');
-  element.classList.remove('wrong');
+  element.classList.remove('correct', 'wrong');
 }
 
 function updateProgress(percent) {
@@ -128,27 +136,34 @@ function startTimer(seconds) {
     if (timeLeft <= 0) {
       clearInterval(countdown);
 
-      // Automatically mark all answers (none selected) as incorrect
       setStatusClass(document.body, false);
       Array.from(answerButtonsElement.children).forEach(button => {
         const isCorrect = button.dataset.correct === 'true';
         setStatusClass(button, isCorrect);
+        button.disabled = true;
       });
 
-      // Proceed to next question or show score
       if (shuffledQuestions.length > currentQuestionIndex + 1) {
-        nextButton.classList.remove('hide');
+        setTimeout(() => {
+          currentQuestionIndex++;
+          setNextQuestion();
+        }, 1000);
       } else {
-        questionContainerElement.classList.add('hide');
-        scoreContainer.classList.remove('hide');
-        scoreText.innerText = `You scored ${score} out of ${shuffledQuestions.length}!`;
-        restartButton.innerText = 'Back to Start Screen';
+        setTimeout(() => {
+          showFinalScore();
+        }, 1000);
       }
     }
   }, 1000);
 }
 
-// Make sure your HTML dropdown uses one of these values: 'easy', 'medium', 'hard', or 'all'.
+function showFinalScore() {
+  questionContainerElement.classList.add('hide');
+  scoreContainer.classList.remove('hide');
+  scoreText.innerText = `You scored ${score} out of ${shuffledQuestions.length}!`;
+  restartButton.innerText = 'Back to Start Screen';
+}
+
 const questions = [
   {
     question: 'What is 2 + 2?',
